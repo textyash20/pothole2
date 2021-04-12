@@ -1,0 +1,69 @@
+1: Front end
+    1.1: Login
+
+    1.2: Register
+
+    1.3: Home Dashboard
+
+    1.4: Admin Dashboard
+
+
+2: Back end
+    2.1: Input images and Flask routes
+        2.1.1: Specifiying all Routes or web app
+
+    2.2: Databse connectiviity And CRUD operation
+        2.2.1: Database CRUD operation
+
+    2.3: Object Detetction utility files
+        2.3.1: Detect.py
+        2.3.2: Detector_util.py
+        2.3.3: label_map_util.py
+
+    2.4: Passing input image to Object detetction Model and returning it again to user
+
+3: Databse
+    3.1: Database selection
+        3.1.1: Sqllite
+            3.1.1.1: User Database
+                3.1.1.1.1: Register New user
+                3.1.1.1.2: Login existing user
+                3.1.1.1.3: Remove existing user
+                3.1.1.1.4: Update password
+
+            3.1.1.2: Image Database
+                3.1.1.2.1: Store input user image
+                3.1.1.2.2: Store location of user
+                3.1.1.2.3: Store user Email Address
+
+        3.1.2: Mysql
+            3.1.2.1: User Database
+                3.1.1.1.1: Register New user
+                3.1.1.1.2: Login existing user
+                3.1.1.1.3: Remove existing user
+                3.1.1.1.4: Update password
+
+            3.1.2.2: Image Database
+                3.1.1.2.1: Store input user image
+                3.1.1.2.2: Store location of user
+                3.1.1.2.3: Store user Email Address
+
+
+
+
+
+4: Model
+    4.1: Data gathering
+        4.1.1: Data collection
+        4.1.2: Data cleaning
+        4.1.2: Data selection
+        4.1.2: Data labeling
+
+    4.2: Model selection
+        4.2.1: Faster Rcnn inception v2 coco
+            4.2.1.1: Model training initilized
+            4.2.1.2: model training halt at 30,000 steps
+
+        4.2.2: SSD Mobilenet v2 coco
+
+    4.3: Model retraining
