@@ -1,7 +1,7 @@
 import mysql.connector
 
-name=int(input("ENTER name:  "))
-uid=int(input("enter uid:    "))
+name = int(input("ENTER name:  "))
+uid = int(input("enter uid:    "))
 
 print(type(name))
 print(type(uid))

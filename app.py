@@ -3,7 +3,6 @@
         CREATED BY @YASH
 """
 
-
 from flask import Flask, request, render_template, redirect, session, Response
 from flask_cors import CORS, cross_origin
 from utils import detect, save_image, detector_util
@@ -11,7 +10,6 @@ from database import db
 import os
 import requests
 import constants
-
 
 os.putenv('LANG', 'en_US.UTF-8')
 os.putenv('LC_ALL', 'en_US.UTF-8')
@@ -58,11 +56,14 @@ def home():
 @app.route('/profile')
 @cross_origin()
 def profile():
-    u_email = session['user_email']
-    fname = db.user_info_basic(u_email)
-    count = db.user_complaint_basic(u_email)
-    return render_template('profile.html', email=u_email, fname=fname, count=count)
-
+    if 'user_email' in session:
+        u_email = session['user_email']
+        fname = db.user_info_basic(u_email)
+        count = db.user_complaint_basic(u_email)
+        user_recent=db.view_recent(u_email)
+        return render_template('profile.html', email=u_email, fname=fname, count=count,lat=user_recent[1],lon=user_recent[2],no_pothole=user_recent[3])
+    else:
+        return redirect('/')
 
 @app.route('/about')
 @cross_origin()
@@ -155,12 +156,12 @@ def view_previous():
     if request.method == 'POST':
         if 'user_email' in session:
             print('with session')
-            headings = {"Email", "latitude", "longitude", "No of potholes detetcted"}
+            headings = {"Email", "latitude", "longitude", "No of potholes detetcted","   "}
             data = db.view_previous(session['user_email'])
             return render_template('view_previous.html', headings=headings, data=data, user_email=session['user_email'])
-    else:
-        print('without session')
-        return render_template('index.html')
+        else:
+            print('without session')
+            return redirect('/')
 
 
 @app.route('/logout')
@@ -180,10 +181,9 @@ if __name__ == "__main__":
     constants.sess = sess1
     constants.detection_graph = detection_graph1
     print('model loaded')
-    app.run(host='localhost', debug=True)
+    #app.run(host='localhost', debug=True)
 
-    '''try:
-        app.run(host='192.168.1.105',debug=True)
+    try:
+        app.run(host='192.168.1.104',port=5000,debug=True)
     except:
         app.run(host='localhost',debug=True)
-'''

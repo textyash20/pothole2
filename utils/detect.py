@@ -21,7 +21,7 @@ def detect_pothole(path, latitude, longitude, user_email_session, img_name):
     lat = latitude
     lon = longitude
     img = path
-    img_name = img_name
+    # img_name = img_name
     print('sessisdj')
     print()
     score_trash = 0.95
@@ -29,15 +29,10 @@ def detect_pothole(path, latitude, longitude, user_email_session, img_name):
     # detection_graph, sess = detector_util.load_inference_graph()
     detection_graph = constants.detection_graph
     sess = constants.sess
-    print(type(sess))
-    print(type(detection_graph))
     num_potholes_detect = 100
     print("entering dtetect pothole method")
-
     im_height, im_width = (None, None)
-
     while True:
-
         frame = cv2.imread(img)
         frame = np.array(frame)
         new_lat = lat
@@ -46,13 +41,13 @@ def detect_pothole(path, latitude, longitude, user_email_session, img_name):
         if im_height == None:
             im_height, im_width = frame.shape[:2]
 
-        try:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        '''try:
+            #frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
             print('inside colour conversion')
         except:
             print("ERROR CONVERING TO RGB")
-
-            # Passing image through tensorflow model
+        '''
+        # Passing image through tensorflow model
 
         boxes, scores, classes = detector_util.detect_objects(frame, detection_graph, sess)
 
@@ -66,38 +61,50 @@ def detect_pothole(path, latitude, longitude, user_email_session, img_name):
         # print(no_of_times_potholes_detetced)
 
         # return frame
-
-        try:
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            imS = cv2.resize(frame, (960, 540))
-            print('inside image saving')
+        if a != 0:
             try:
-                img_path_save, image_name_save = save_image.get_save_location_of_detected()
-                # path_name = 'images/detected/detected_'+str(datetime.now().strftime("%d_%m_%Y_%H:%M:%S"))+'_at.jpeg'
-                # filename = "/images/detected/detected_" + datetime.now().strftime("%d_%m_%Y_%H:%M:%S") + ".jpg"
-                cv2.imwrite(img_path_save, frame)
-                # cv2.imwrite('')
-                # cv2.imshow('output', imS)
-                # cv2.waitKey(0)
-                # cv2.destroyAllWindows()
-                print('done saving')
-                time.sleep(5)
-                db.savei(user_email_session, image_name_save, img_path_save, new_lat, new_lon, a)
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                imS = cv2.resize(frame, (960, 540))
+                print('inside image saving')
+                try:
+                    img_path_save, image_name_save = save_image.get_save_location_of_detected()
+                    cv2.imwrite(img_path_save, frame)
+                    print('done saving')
+                    time.sleep(5)
+                    db.savei(user_email_session, image_name_save, img_path_save, new_lat, new_lon, a)
+                except:
+                    print('except')
+                    pass
 
+                # new code from TG
+                print('inside image encoding')
+                try:
+                    (flag, encodedImage) = cv2.imencode(".jpg", frame)
+                except:
+                    print('cant encode')
+                    pass
+
+                # print(type(encodedImage))
+
+                # yield the output frame in the byte format
+                try:
+                    print('yielding')
+                    return (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
+                except:
+                    print('cant yield')
+                    pass
 
             except:
-
-                print('except')
-
-            # new code from TG
-            print('inside image encoding')
+                print("cant write")
+                return 0
+        else:
             try:
                 (flag, encodedImage) = cv2.imencode(".jpg", frame)
             except:
                 print('cant encode')
                 pass
 
-            print(type(encodedImage))
+            # print(type(encodedImage))
 
             # yield the output frame in the byte format
             try:
@@ -105,7 +112,4 @@ def detect_pothole(path, latitude, longitude, user_email_session, img_name):
                 return (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
             except:
                 print('cant yield')
-
-        except:
-            print("cant write")
-            return 0
+                pass

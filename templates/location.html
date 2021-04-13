@@ -4,8 +4,8 @@
 
 <p>Click the button to get your coordinates.</p>
 
-<form action="" method="post" id='myForm2'>
-    <button id="myButton2" name="button2" value=position.coords.latitude onclick="getLocation()">Send</button>
+<form action="" id='myForm2' method="post">
+    <button id="myButton2" name="button2" onclick="getLocation()" value=position.coords.latitude>Send</button>
 </form>
 <br>
 <br>
@@ -37,6 +37,9 @@ function showPosition(position) {
   window.alert()
 
 }
+
+
+
 </script>
 
 </body>

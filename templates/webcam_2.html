@@ -48,28 +48,31 @@
         font-family: Arial;
         text-align: center;
     }
+
+
+
     </style>
     <title>My Favorite Sport</title>
 </head>
 
 <body>
-    <div class="contentarea">
-        <h1>
-            Using Javascript to capture Photo
-        </h1>
-        <div class="camera">
-            <video id="video">Video stream not available.</video>
-        </div>
-        <div>
-            <button id="startbutton">Take photo</button>
-        </div>
-        <canvas id="canvas"></canvas>
-        <div class="output">
-            <img id="photo" alt="The screen capture will appear in this box.">
-        </div>
+<div class="contentarea">
+    <h1>
+        Using Javascript to capture Photo
+    </h1>
+    <div class="camera">
+        <video id="video">Video stream not available.</video>
     </div>
+    <div>
+        <button id="startbutton">Take photo</button>
+    </div>
+    <canvas id="canvas"></canvas>
+    <div class="output">
+        <img alt="The screen capture will appear in this box." id="photo">
+    </div>
+</div>
 
-    <script>
+<script>
     /* JS comes here */
     (function() {
 
@@ -151,7 +154,10 @@
 
         window.addEventListener('load', startup, false);
     })();
-    </script>
+
+
+
+</script>
 </body>
 
 </html>

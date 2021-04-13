@@ -5,16 +5,16 @@ import sys
 import tensorflow as tf
 import cv2
 from utils import label_map_util
-
-
+import constants
 
 detection_graph = tf.Graph()
 
+BASE_DIR=constants.BASEDIR
 TRAINED_MODEL_DIR = 'frozen_graphs'
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
-PATH_TO_CKPT = TRAINED_MODEL_DIR + '/frozen_inference_graph.pb'
+PATH_TO_CKPT = BASE_DIR+TRAINED_MODEL_DIR + '/frozen_inference_graph.pb'
 # List of the strings that is used to add correct label for each box.
-PATH_TO_LABELS = TRAINED_MODEL_DIR + '/pothole_labelmap.pbtxt'
+PATH_TO_LABELS = BASE_DIR+TRAINED_MODEL_DIR + '/pothole_labelmap.pbtxt'
 
 NUM_CLASSES = 1
 # load label map using utils provided by tensorflow object detection api
@@ -43,9 +43,10 @@ def load_inference_graph():
     return detection_graph, sess
 
 
-def draw_box_on_image(num_potholes_detect, score_thresh, scores, boxes, classes, im_width, im_height, image_np,lat,lon):
-    latitude=lat
-    longitude=lon
+def draw_box_on_image(num_potholes_detect, score_thresh, scores, boxes, classes, im_width, im_height, image_np, lat,
+                      lon):
+    latitude = lat
+    longitude = lon
     focalLength = 875
     avg_width = 4.0
     # To more easily differetiate distances and detected bboxes
@@ -66,7 +67,6 @@ def draw_box_on_image(num_potholes_detect, score_thresh, scores, boxes, classes,
                 id = 'pothole'
                 # b=1
 
-
             if i == 0:
                 color = color0
             else:
@@ -77,31 +77,30 @@ def draw_box_on_image(num_potholes_detect, score_thresh, scores, boxes, classes,
             p1 = (int(left), int(top))
             p2 = (int(right), int(bottom))
 
-
             dist = distance_to_camera(avg_width, focalLength, int(right - left))
 
             if dist:
                 pass
-                #pothole_cnt = pothole_cnt + 1
+                # pothole_cnt = pothole_cnt + 1
             cv2.rectangle(image_np, p1, p2, color, 5, 1)
-            pothole_cnt=pothole_cnt+1
+            pothole_cnt = pothole_cnt + 1
             print(pothole_cnt)
 
             color_geo = (0, 0, 255)
             cv2.putText(image_np, 'Latitude  :' + str(latitude), (10, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color_geo, 2)
-            cv2.putText(image_np, 'Longitude : ' + str(longitude), (10, 136), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color_geo, 2)
+            cv2.putText(image_np, 'Longitude : ' + str(longitude), (10, 136), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color_geo,
+                        2)
 
-            #cv2.putText(image_np, 'pothole' + str(i) + ': ' + id, (int(left), int(top) - 5),
-                        #cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            # cv2.putText(image_np, 'pothole' + str(i) + ': ' + id, (int(left), int(top) - 5),
+            # cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
             cv2.putText(image_np, 'confidence: ' + str("{0:.2f}".format(scores[i])),
                         (int(left), int(top) - 20),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-            #cv2.putText(image_np, 'distance from camera: ' + str("{0:.2f}".format(dist) + ' inches'),
-             #           (int(im_width * 0.65), int(im_height * 0.9 + 30 * i)),
-              #          cv2.FONT_HERSHEY_SIMPLEX, 0.3, color, 2)
-
+            # cv2.putText(image_np, 'distance from camera: ' + str("{0:.2f}".format(dist) + ' inches'),
+            #           (int(im_width * 0.65), int(im_height * 0.9 + 30 * i)),
+            #          cv2.FONT_HERSHEY_SIMPLEX, 0.3, color, 2)
 
         if pothole_cnt == 0:
             a = 0
@@ -110,7 +109,6 @@ def draw_box_on_image(num_potholes_detect, score_thresh, scores, boxes, classes,
             a = pothole_cnt
             # print(" pothole")
     print('inside draw box method')
-
 
     return a
 
